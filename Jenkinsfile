@@ -7,19 +7,37 @@ pipeline {
         stage('Checkout') {
 
             steps {
-                git 'YOUR_GITHUB_REPO'
+                checkout scm
             }
 
         }
 
-        stage('Cross Browser Test') {
+        stage('Build') {
 
             steps {
-
-                sh 'mvn clean test'
-
+                sh 'mvn clean compile'
             }
 
+        }
+
+        stage('Cross Browser Testing') {
+
+            steps {
+                sh 'mvn test'
+            }
+
+        }
+
+    }
+
+    post {
+
+        success {
+            echo 'Cross Browser Testing Successful'
+        }
+
+        failure {
+            echo 'Cross Browser Testing Failed'
         }
 
     }
