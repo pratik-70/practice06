@@ -2,8 +2,13 @@ package tests;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
+
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
+
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
@@ -13,30 +18,36 @@ public class BrowserTest {
 
     @Parameters("browser")
     @Test
-    public void openGoogle(String browser) throws Exception {
+    public void openGoogle(String browser) {
 
-        if(browser.equalsIgnoreCase("chrome")){
+        if(browser.equalsIgnoreCase("chrome")) {
 
             WebDriverManager.chromedriver().setup();
-            driver=new ChromeDriver();
+
+            ChromeOptions options = new ChromeOptions();
+            options.addArguments("--headless=new");
+            options.addArguments("--no-sandbox");
+            options.addArguments("--disable-dev-shm-usage");
+
+            driver = new ChromeDriver(options);
 
         }
 
-        else{
+        else {
 
             WebDriverManager.firefoxdriver().setup();
-            driver=new FirefoxDriver();
+
+            FirefoxOptions options = new FirefoxOptions();
+            options.addArguments("--headless");
+
+            driver = new FirefoxDriver(options);
 
         }
 
         driver.get("https://www.google.com");
 
-        System.out.println(browser+" opened successfully");
-
-        Thread.sleep(3000);
+        System.out.println(browser + " working");
 
         driver.quit();
-
     }
-
 }
